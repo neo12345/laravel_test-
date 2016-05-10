@@ -1,9 +1,9 @@
-@extends('layouts.master')
+@extends('layouts.app')
 
 @section('content')
 
 <h1>Task List</h1>
-<p class="lead">Here's a list of all your tasks. <a href="/tasks/create">Add a new one?</a></p>
+<p class="lead">Here's a list of all your tasks. <a href="{{ route('tasks.create') }}">Add a new one?</a></p>
 <hr>
 @foreach($tasks as $task)
     <h3>{{ $task->title }}</h3>

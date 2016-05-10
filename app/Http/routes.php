@@ -16,8 +16,32 @@ Route::get('/', [
 ]);
 
 
-Route::resource('tasks', 'TasksController');
-Route::resource('news', 'NewsController');
+Route::resource('tasks', 'TasksController', ['only' => ['index', 'show', 'create']]);
+Route::resource('news', 'NewsController', ['only' => ['index', 'show', 'create']]);
+
+Route::resource('posts', 'PostsController', ['only' => ['index', 'show', 'create']]);
+//Route::resource('posts', 'PostsController');
+Route::group(['middleware' => 'App\Http\Middleware\AdminMiddleware'], function()
+{
+    Route::resource('posts', 'PostsController', ['except' => ['index', 'show', 'create', 'store']]);
+    Route::resource('tasks', 'TasksController', ['except' => ['index', 'show', 'create']]);
+    Route::resource('news', 'NewsController', ['except' => ['index', 'show', 'create']]);
+});
+
+Route::group(['middleware' => 'App\Http\Middleware\EditFormCreatePost'], function()
+{
+    Route::resource('posts', 'PostsController', ['only' => ['store']]);
+});
+
+Route::get('files', 'FilesController@index');
+Route::get('files/get/{filename}', [
+	'as' => 'getentry', 'uses' => 'FilesController@get']);
+Route::get('files/download/{filename}', [
+	'as' => 'downloadentry', 'uses' => 'FilesController@download']);
+Route::post('files/add',[ 
+        'as' => 'addentry', 'uses' => 'FilesController@add']);
+Route::delete('files/delete/{filename}',[ 
+        'as' => 'deleteentry', 'uses' => 'FilesController@delete']);
 
 Route::auth();
 

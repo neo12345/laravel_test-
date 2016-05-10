@@ -11,8 +11,8 @@
     @endif
 
     {!! Form::open([
-        'route' => 'news.store'
+        'route' => 'posts.store'
     ]) !!}
-    @include('forms.form_news', ['text_submit' => 'Create news'])
+    @include('forms.form_posts', ['text_submit' => 'Create post'])
     
 @stop
