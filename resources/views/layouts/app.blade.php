@@ -51,6 +51,7 @@
                     <li><a href="{{ url('/news') }}">News</a></li>
                     <li><a href="{{ url('/posts') }}">Posts</a></li>
                     <li><a href="{{ url('/files') }}">Files</a></li>
+                    <li><a href="{{ url('/emails') }}">Emails</a></li>
                 </ul>
 
                 <!-- Right Side Of Navbar -->

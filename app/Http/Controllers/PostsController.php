@@ -42,7 +42,8 @@ class PostsController extends Controller
     {
         $input = $request->all();
 
-        Posts::create($input);
+        $job = (new \App\Jobs\QueueWorks($input, 'posts'))->delay(60);
+        $this->dispatch($job);
 
         Session::flash('flash_message', 'Post successfully added');
 

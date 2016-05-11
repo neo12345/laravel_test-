@@ -39,8 +39,8 @@ class NewsController extends Controller
 
         $input = $request->all();
 
-        News::create($input);
-
+        $job = (new \App\Jobs\QueueWorks($input, 'news'))->delay(60);
+        $this->dispatch($job);
         Session::flash('flash_message', 'News successfully added');
 
         return redirect()->route('news.index');

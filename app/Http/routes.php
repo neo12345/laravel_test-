@@ -46,3 +46,6 @@ Route::delete('files/delete/{filename}',[
 Route::auth();
 
 Route::get('/home', 'HomeController@index');
+
+Route::resource('emails', 'EmailsController');
+Route::post('emails/send', 'EmailsController@send');
