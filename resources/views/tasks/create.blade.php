@@ -16,8 +16,8 @@
 ]) !!}
 
 <div class="form-group">
-    {!! Form::label('title', 'Title:', ['class' => 'control-label']) !!}
-    {!! Form::text('title', null, ['class' => 'form-control']) !!}
+    {!! Form::label('task', 'Task:', ['class' => 'control-label']) !!}
+    {!! Form::text('task', null, ['class' => 'form-control']) !!}
 </div>
 
 <div class="form-group">

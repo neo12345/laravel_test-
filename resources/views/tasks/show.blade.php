@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h1>{{ $task->title }}</h1>
+<h1>{{ $task->task }}</h1>
 <p class="lead">{{ $task->description }}</p>
 <hr>
 

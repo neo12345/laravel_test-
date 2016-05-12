@@ -48,6 +48,7 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
                     <li><a href="{{ url('/tasks') }}">Tasks</a></li>
+                    <li><a href="{{ url('/tasksajax') }}">Tasks Ajax</a></li>
                     <li><a href="{{ url('/news') }}">News</a></li>
                     <li><a href="{{ url('/posts') }}">Posts</a></li>
                     <li><a href="{{ url('/files') }}">Files</a></li>

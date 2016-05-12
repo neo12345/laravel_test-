@@ -31,7 +31,7 @@ class TasksController extends Controller {
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title' => 'required',
+            'task' => 'required',
             'description' => 'required'
         ]);
         
@@ -63,7 +63,7 @@ class TasksController extends Controller {
         $task = Task::findOrFail($id);
 
         $this->validate($request, [
-            'title' => 'required',
+            'task' => 'required',
             'description' => 'required'
         ]);
 

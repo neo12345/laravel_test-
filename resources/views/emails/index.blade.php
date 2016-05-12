@@ -31,6 +31,9 @@
         {{ Form::label('body', 'Body: ', ['class' => 'label-control']) }}
         {{ Form::textarea('body', null, ['class' => 'form-control']) }}
         <hr>
+        {{ Form::label('attach', 'Attach: ', ['class' => 'label-control']) }}
+        {{ Form::file('attach', ['class' => 'form-control']) }}
+        <hr>
         {{ Form::submit('Send', ['class' => 'btn btn-primary']) }}
     {{ Form::close()}}
 @endsection

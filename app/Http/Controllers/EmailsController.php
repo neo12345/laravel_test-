@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Response;
 
 use App\Http\Requests;
+use App\Files;
 use Session;
 
 class EmailsController extends Controller
@@ -103,18 +107,39 @@ class EmailsController extends Controller
             'name' => $request->name,
             'receiver' => $request->receiver,
             'replyTo' => $request->replyTo,
-            'subject' => $request->subject
-        );
-        Mail::send('emails.welcome', $body, function($message) use ($data) {
-            $message->from($data['sender'], $data['name'])
-                ->subject($data['subject'])
-                ->to($data['receiver'])
-                ->replyTo($data['replyTo'], $data['name']);
-
-        });
+            'subject' => $request->subject,
+            );
+        $file = $request->attach;
+        
+        if($file)
+        {
+            $extension = $file->getClientOriginalExtension();
+            Storage::disk('local')->put($file->getFilename() . '.' . $extension, File::get($file));        
+            $filename = $file->getFilename() . '.' . $extension;
+            $attach = url('../storage/app') . '/' . $filename;
+            
+            Mail::send('emails.welcome', $body, function($message) use ($data, $attach) {
+                $message->from($data['sender'], $data['name'])
+                    ->subject($data['subject'])
+                    ->to($data['receiver'])
+                    ->replyTo($data['replyTo'], $data['name'])
+                    ->attach($attach);
+            });
+            
+            Storage::disk('local')->delete($filename);
+        }
+        else
+        {
+            Mail::send('emails.welcome', $body, function($message) use ($data) {
+                $message->from($data['sender'], $data['name'])
+                    ->subject($data['subject'])
+                    ->to($data['receiver'])
+                    ->replyTo($data['replyTo'], $data['name']);
+            });
+        }
         
         Session::flash('flash_message', 'Your email has been send successfully!');
-        
+
         return redirect()->route('emails.index');
     }
 }

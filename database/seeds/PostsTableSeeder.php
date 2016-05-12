@@ -7,6 +7,7 @@ use App\Posts;
 class PostsTableSeeder extends Seeder{
     public function run()
     {
+        DB::table('posts')->delete();
         foreach(range(1,50) as $index)
         {
             Posts::create([
