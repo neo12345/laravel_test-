@@ -3,6 +3,8 @@
 @section('content')
         <h3>{{ $post->title }}</h3>
         <p>{{ $post->description }}</p>
+        
+        @can('update-post')
         <p>          
             {{ Form::open([
                 'method' => 'DELETE',
@@ -13,5 +15,6 @@
             {{ Form::close()}}
         </p>
         <p><a href="{{ route('posts.index')}}"><h4>Back to Posts List</h4></a></p>
+        @endcan
 @stop
 

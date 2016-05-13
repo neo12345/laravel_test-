@@ -6,7 +6,10 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Requests\CheckPostsRequest;
 use App\Posts;
+use User;
+use Gate;
 use Session;
+use Auth;
 
 class PostsController extends Controller
 {
@@ -53,7 +56,11 @@ class PostsController extends Controller
     public function edit($id)
     {
         $post = Posts::findorfail($id);
-
+        $user = Auth::user();
+        if (Gate::forUser($user)->denies('update-post')) {
+            echo "dsdasdsdad";
+        }
+        
         $data = array(
             'post' => $post
         );
@@ -64,6 +71,8 @@ class PostsController extends Controller
     public function update(CheckPostsRequest $request, $id)
     {
         $post = Posts::findorfail($id);
+        
+        
 
         $input = $request->all();
 

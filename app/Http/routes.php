@@ -68,6 +68,7 @@ Route::group(['middleware' => 'App\Http\Middleware\AdminMiddleware'], function()
     Route::resource('posts', 'PostsController', ['except' => ['index', 'show', 'create', 'store']]);
     Route::resource('tasks', 'TasksController', ['except' => ['index', 'show', 'create']]);
     Route::resource('news', 'NewsController', ['except' => ['index', 'show', 'create']]);
+    Route::get('blog/posts/list', 'Blog\PostsController@showList');
 });
 
 Route::group(['middleware' => 'App\Http\Middleware\EditFormCreatePost'], function()
@@ -91,3 +92,7 @@ Route::get('/home', 'HomeController@index');
 
 Route::resource('emails', 'EmailsController');
 Route::post('emails/send', 'EmailsController@send');
+
+
+Route::resource('blog/tag', 'Blog\TagController', ['except' => 'show']);
+Route::resource('blog/posts', 'Blog\PostsController');
