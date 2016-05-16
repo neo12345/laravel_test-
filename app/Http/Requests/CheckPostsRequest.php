@@ -26,8 +26,15 @@ class CheckPostsRequest extends Request
         return [
             'title' => 'required|min:5',
             'slug' => 'required|min:5',
-            'description' => 'required',
+            'description' => 'required|must_be_a_b_c_d',
             'content' => 'required'
+        ];
+    }
+    
+    public function messages()
+    {
+        return [
+            'description.must_be_a_b_c_d' => 'Custom error messages ABCD',
         ];
     }
 }

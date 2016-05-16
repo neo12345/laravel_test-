@@ -19,7 +19,7 @@ class EditFormCreatePost
         
         $input['title'] = 'middleware.'.$input['title'];
         $input['slug'] = 'middleware.'.$input['slug'];
-        $input['description'] = 'middleware.'.$input['description'];
+        $input['description'] = $input['description'];
         $input['content'] = 'middleware.'.$input['content'];
         $request->replace($input);
         

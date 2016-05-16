@@ -96,3 +96,18 @@ Route::post('emails/send', 'EmailsController@send');
 
 Route::resource('blog/tag', 'Blog\TagController', ['except' => 'show']);
 Route::resource('blog/posts', 'Blog\PostsController');
+
+Route::get('/admin/login','Adminauth\AuthController@showLoginForm');
+Route::post('/admin/login','Adminauth\AuthController@login');
+Route::get('/admin/password/reset','Adminauth\PasswordController@resetPassword');
+Route::get('admin/register', 'Adminauth\AuthController@showRegistrationForm');
+Route::post('admin/register', 'Adminauth\AuthController@register');
+Route::group(['middleware' => ['admin']], function () {
+    //Login Routes...
+    Route::get('/admin/logout','Adminauth\AuthController@logout');
+	
+    // Registration Routes...
+    
+
+    Route::get('/admin', 'Admin\Employee@index');
+});
