@@ -10,13 +10,16 @@ use User;
 use Gate;
 use Session;
 use Auth;
+use Cache;
 
 class PostsController extends Controller
 {
 
     public function index()
     {
-        $posts = Posts::orderBy('updated_at', 'desc')->paginate(10);
+        $posts = Cache::remember('posts', 10, function() {
+            return Posts::orderBy('updated_at', 'desc')->paginate(10);
+        });
 
         $data = array(
             'posts' => $posts
@@ -49,6 +52,7 @@ class PostsController extends Controller
         $this->dispatch($job);
 
         Session::flash('flash_message', 'Post successfully added');
+        Cache::forget('posts');
 
         return redirect()->route('posts.index');
     }
@@ -57,8 +61,8 @@ class PostsController extends Controller
     {
         $post = Posts::findorfail($id);
         $user = Auth::user();
-        if (Gate::forUser($user)->denies('update-post')) {
-            echo "dsdasdsdad";
+        if (Gate::forUser($user)->allows('update-post')) {
+            Session::flash('flash_message', 'You have permission to update post');
         }
         
         $data = array(
@@ -71,14 +75,13 @@ class PostsController extends Controller
     public function update(CheckPostsRequest $request, $id)
     {
         $post = Posts::findorfail($id);
-        
-        
 
         $input = $request->all();
 
         $post->fill($input)->save();
 
         Session::flash('flash_message', 'Post successfully edited');
+        Cache::forget('posts');
 
         return redirect()->route('posts.show', $post->id);
     }
@@ -90,6 +93,7 @@ class PostsController extends Controller
         $post->delete();
 
         Session::flash('flash_message', 'Post successfully deleted');
+        Cache::forget('posts');
 
         return redirect()->route('posts.index');
     }

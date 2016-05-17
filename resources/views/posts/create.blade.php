@@ -10,6 +10,7 @@
         </div>
     @endif
 
+    Create posts will be queued!
     {!! Form::open([
         'route' => 'posts.store'
     ]) !!}

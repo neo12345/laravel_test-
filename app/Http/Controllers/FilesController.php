@@ -10,14 +10,16 @@ use Illuminate\Http\Response;
 use App\Http\Requests;
 use App\Files;
 use Session;
+use Cache;
 
 class FilesController extends Controller
 {
 
     public function index()
     {
-        $files = Files::all();
-
+        $files = Cache::remember('files', 10, function() {      
+            return $files = Files::all();
+        });
         $data = array(
             'files' => $files
         );
@@ -43,6 +45,8 @@ class FilesController extends Controller
         $entry->filename = $file->getFilename() . '.' . $extension;
 
         $entry->save();
+        
+        Cache::forget('files');
 
         return redirect(url('files'));
     }
@@ -63,6 +67,8 @@ class FilesController extends Controller
         //File::delete(Storage::disk('local')->get($entry->filename));
         Storage::disk('local')->delete($entry->filename);
         $entry->delete();
+        
+        Cache::forget('files');
 
         return redirect(url('files'));
     }

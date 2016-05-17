@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\News;
 use Session;
+use Cache;
 use App\Http\Requests;
 
 class NewsController extends Controller
@@ -19,8 +20,10 @@ class NewsController extends Controller
 
     public function index()
     {
-        $news = News::all();
-
+        $news = Cache::remember('news', 10, function() {
+            return News::all();
+        });
+        
         $data = array(
             'news' => $news
         );
@@ -41,7 +44,9 @@ class NewsController extends Controller
 
         $job = (new \App\Jobs\QueueWorks($input, 'news'))->delay(60);
         $this->dispatch($job);
+        
         Session::flash('flash_message', 'News successfully added');
+        Cache::forget('news');
 
         return redirect()->route('news.index');
     }
@@ -79,6 +84,7 @@ class NewsController extends Controller
         $news->fill($input)->save();
 
         Session::flash('flash_message', 'News successfully edited');
+        Cache::forget('news');
 
         return redirect()->route('news.show', $news->id);
     }
@@ -90,6 +96,7 @@ class NewsController extends Controller
         $news->delete();
 
         Session::flash('flash_message', 'News successfully deleted!');
+        Cache::forget('news');
 
         return redirect()->route('news.index');
     }

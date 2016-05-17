@@ -4,6 +4,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Task;
 use Session;
+use Cache;
  
 use Illuminate\Http\Request;
  
@@ -12,8 +13,10 @@ class TasksController extends Controller {
 	
 	public function index()
 	{
-		$tasks = Task::all();
-
+		$tasks = Cache::remember('tasks', 10, function() {
+            return Task::all();
+        });
+        
         return view('tasks.index')->withTasks($tasks);
 	}
  
@@ -40,6 +43,7 @@ class TasksController extends Controller {
         Task::create($input);
         
         Session::flash('flash_message', 'Task successfully added!');
+        Cache::forget('tasks');
 
         return redirect()->back();
     }
@@ -72,6 +76,7 @@ class TasksController extends Controller {
         $task->fill($input)->save();
 
         Session::flash('flash_message', 'Task successfully added!');
+        Cache::forget('tasks');
 
         return redirect()->back();
     }
@@ -83,6 +88,7 @@ class TasksController extends Controller {
         $task->delete();
 
         Session::flash('flash_message', 'Task successfully deleted!');
+        Cache::forget('tasks');
 
         return redirect()->route('tasks.index');
     }

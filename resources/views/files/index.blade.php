@@ -14,7 +14,9 @@
     {{ Form::close() }}
     
     <hr>
-    <ul class="thumbnails">
+    <b>Load from cache</b>
+    
+    <ul class="thumbnails">    
         @foreach($files as $file)
             <div class="col-md-2">
                 <div class="thumbnail" id="file{{ $file->filename }}">

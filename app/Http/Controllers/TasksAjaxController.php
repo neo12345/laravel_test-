@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use App\Http\Requests;
 use App\Task;
+use Cache;
 
 class TasksAjaxController extends Controller
 {
@@ -18,7 +19,9 @@ class TasksAjaxController extends Controller
     public function index()
     {
         //
-        $tasks = Task::all();
+        $tasks = Cache::remember('tasks', 10, function() {
+            return Task::all();
+        });
 
         return View('tasks.welcome')->with('tasks', $tasks);
     }
@@ -43,6 +46,7 @@ class TasksAjaxController extends Controller
     {
         $task = Task::create($request->all());
 
+        Cache::forget('tasks');
         return Response::json($task);
     }
 
@@ -87,6 +91,8 @@ class TasksAjaxController extends Controller
         $task->description = $request->description;
 
         $task->save();
+        
+        Cache::forget('tasks');
 
         return Response::json($task);
     }
@@ -101,6 +107,8 @@ class TasksAjaxController extends Controller
     {
         //
         $task = Task::destroy($id);
+        
+        Cache::forget('tasks');
 
         return Response::json($task);
     }

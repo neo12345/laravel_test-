@@ -31,7 +31,7 @@ class SendMailFired
     {
         
         $body = [
-            'body' => 'test',
+            'body' => 'Login successfully.',
         ];
         Mail::send('emails.welcome', $body, function($message) {
             $message->to('test.mail.laravel@gmail.com');

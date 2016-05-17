@@ -9,7 +9,7 @@
             @endforeach
         </div>
     @endif
-
+    Create news will be queued!
     {!! Form::open([
         'route' => 'news.store'
     ]) !!}

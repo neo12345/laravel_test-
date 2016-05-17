@@ -99,7 +99,7 @@ Route::resource('blog/posts', 'Blog\PostsController');
 
 Route::get('/admin/login','Adminauth\AuthController@showLoginForm');
 Route::post('/admin/login','Adminauth\AuthController@login');
-Route::get('/admin/password/reset','Adminauth\PasswordController@resetPassword');
+
 Route::get('admin/register', 'Adminauth\AuthController@showRegistrationForm');
 Route::post('admin/register', 'Adminauth\AuthController@register');
 Route::group(['middleware' => ['admin']], function () {
@@ -111,3 +111,8 @@ Route::group(['middleware' => ['admin']], function () {
 
     Route::get('/admin', 'Admin\Employee@index');
 });
+
+Route::get('adminauth/email-auth/{token}', [
+    'as' => 'adminauth.email-auth',
+    'uses' => 'Adminauth\AuthController@authenticateEmail'
+]);

@@ -8,7 +8,8 @@
                 <div class="panel-heading">Dashboard</div>
 
                 <div class="panel-body">
-                    You are logged in!
+                    Email sent!
+                    <a href="{{ url('/admin/logout') }}"><h3>Logout</h3></a>
                 </div>
             </div>
         </div>

@@ -34,7 +34,7 @@ class CheckPostsRequest extends Request
     public function messages()
     {
         return [
-            'description.must_be_a_b_c_d' => 'Custom error messages ABCD',
+            'description.must_be_a_b_c_d' => '[custom validate] Must be ABCD!',
         ];
     }
 }
