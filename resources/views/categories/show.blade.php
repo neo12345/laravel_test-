@@ -6,7 +6,8 @@
     <hr>
     {{ $category->description }}
     <hr>
-
+    
+    @if(Gate::forUser($user)->allows('store', $auth))
     {{ Form::open([
         'method' => 'DELETE',
         'route' => ['categories.destroy', $category->slug],
@@ -14,7 +15,8 @@
         <a href="{{ route('categories.edit', $category->slug) }}" class="btn btn-warning">Sua doi</a>
         {{ Form::submit('Xoa', ['class' => 'btn btn-danger']) }}
     {{ Form::close() }}
-
+    @endif
+    <hr>
     <div class="panel panel-default">
         <div class="panel-heading">
             <b>Danh sach</b>

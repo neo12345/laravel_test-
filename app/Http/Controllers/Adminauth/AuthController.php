@@ -3,14 +3,11 @@
 namespace App\Http\Controllers\Adminauth;
 
 use App\Admin;
-use App\Http\Controllers\Adminauth;
-use Illuminate\Http\Request;
 use Validator;
-use Session;
-use Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Auth;
 
 class AuthController extends Controller
 {
@@ -33,33 +30,8 @@ class AuthController extends Controller
      * @var string
      */
     protected $redirectTo = '/';
-    protected $guard = 'admin';
+	protected $guard = 'admin';
 
-    public function showLoginForm()
-    {
-        if (Auth::guard('admin')->check()) {
-            return redirect('/admin');
-        }
-
-        return view('admin.auth.login');
-    }
-
-    public function showRegistrationForm()
-    {
-        return view('admin.auth.register');
-    }
-
-    public function resetPassword()
-    {
-        return view('admin.auth.passwords.email');
-    }
-
-    public function logout()
-    {
-        Auth::guard('admin')->logout();
-        return redirect('/');
-    }
-    
     /**
      * Create a new authentication controller instance.
      *
@@ -69,6 +41,31 @@ class AuthController extends Controller
     {
         $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
     }
+
+    public function showLoginForm()
+	{
+		if (Auth::guard('admin')->check())
+		{
+			return redirect('/admin');
+		}
+		
+		return view('admin.auth.login');
+	}
+	
+	public function showRegistrationForm()
+	{
+		return view('admin.auth.register');
+	}
+	
+	public function resetPassword()
+	{
+		return view('admin.auth.passwords.email');
+	}
+	
+	public function logout(){
+		Auth::guard('admin')->logout();
+		return redirect('/admin/login');
+	}
 
     /**
      * Get a validator for an incoming registration request.
@@ -80,7 +77,7 @@ class AuthController extends Controller
     {
         return Validator::make($data, [
             'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
+            'email' => 'required|email|max:255|unique:admins',
             'password' => 'required|min:6|confirmed',
         ]);
     }

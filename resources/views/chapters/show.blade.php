@@ -4,6 +4,8 @@
 <div class="container">
     <a href="{{ route('comics.show', $comic->slug) }}" class="btn btn-info">Tro lai</a>
     <hr>
+    
+    @if(Gate::forUser($user)->allows('store', $auth))
     <div class="form-group">
         {{ Form::open([
             'method' => 'DELETE',
@@ -14,8 +16,14 @@
         {{ Form::close() }}
     </div>
     <hr>
+    
+    <div class="form-group">
+        <a href="{{ route('comics.chapters.pages.create', [$comic->slug, $chapter->name]) }}" class="btn btn-primary">Them trang</a>
+    </div>       
+    @endif
+    
     @foreach($chapter->pages as $page)
-    <img src="{{ $page->link }}"/>
+    <img src="{{ url('../storage/app/public').'/'.$page->link }}"/>
     @endforeach
 </div>    
 @endsection

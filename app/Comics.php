@@ -15,8 +15,6 @@ class Comics extends Model
         'description',
         'publish',
     ];
-    //khi co thay doi se thay doi updated_at cua
-    protected $touches = [];
 
     //Dinh nghia quan he voi category
     public function categories()
@@ -32,14 +30,31 @@ class Comics extends Model
         return $this->hasMany('App\Chapters', 'comic_id');
     }
 
-    //Xoa tat car cac thu cos lien quan truoc khi xoa
+    //Dinh nghia quan he voi comment
+    public function comments()
+    {
+        return $this->hasMany('App\Comments', 'pivot_comic_comments', 'comic_id', 'comment_id');
+    }
+
+    //Xoa tat car cac thu co lien quan truoc khi xoa
     public static function boot()
     {
         parent::boot();
 
         static::deleted(function($comic) {
+            foreach ($comic->chapters as $chapter) {
+                $chapter->pages()->delete();
+                foreach ($chapter->comments as $comment) {
+                    $comment->replies()->delete();
+                }
+                $chapter->comments()->delete();
+            }
             $comic->chapters()->delete();
             $comic->categories()->detach();
+            foreach ($comic->comments as $comment) {
+                $comment->replies()->delete();
+            }
+            $comic->comments()->delete();
         });
     }
 }

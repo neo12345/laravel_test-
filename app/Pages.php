@@ -12,6 +12,9 @@ class Pages extends Model
         'chapter_id'
     ];
     
+    //khi co thay doi se thay doi updated_at cua
+    protected $touches = ['Chapters'];
+    
     //Dinh nghia quan he
     public function chapters(){
         return $this->belongsTo('App\Chapters', 'chapter_id');

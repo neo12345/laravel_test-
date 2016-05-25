@@ -11,9 +11,20 @@ use App\Comics;
 use App\Categories;
 use Cache;
 use Session;
+use Gate;
+use Illuminate\Support\Facades\Auth;
 
 class ComicsController extends Controller
 {
+
+    public function __construct()
+    {
+        // Middleware for all functions
+        $this->middleware('admin');
+
+        // Use middleware only on some functions
+        $this->middleware('admin', ['only' => 'create', 'edit', 'editCategory']);
+    }
 
     /**
      * Display a listing of the resource.
@@ -22,11 +33,13 @@ class ComicsController extends Controller
      */
     public function index()
     {
-        $comics = Cache::remember('comics', 10, function() {
-                return Comics::where('publish', '=', '1')->orderBy('updated_at', 'DESC')->paginate(5);
-            });
+        $auth = Auth::guard('admin')->check();
+        $user = Auth::guard('admin')->user();
+        $comics = Comics::where('publish', '=', '1')->orderBy('updated_at', 'DESC')->paginate(5);
 
         $data = array(
+            'user' => $user,
+            'auth' => $auth,
             'comics' => $comics,
         );
 
@@ -51,6 +64,13 @@ class ComicsController extends Controller
      */
     public function store(Request $request)
     {
+        $auth = Auth::guard('admin')->check();
+        $user = Auth::guard('admin')->user();
+        if(Gate::forUser($user)->denies('store', $auth))
+        {
+            return redirect('admin/login');
+        }
+
         $this->validate($request, [
             'name' => 'required|max:255|unique:comics',
             'slug' => 'required|max:255|unique:comics|alpha_dash',
@@ -104,11 +124,15 @@ class ComicsController extends Controller
     public function show(Comics $comic)
     {
         //$comic = Comics::with('chapters', 'categories')->findorfail($id);//;
+        $auth = Auth::guard('admin')->check();
+        $user = Auth::guard('admin')->user();
         $comics = Comics::with(['chapters' => function($query) {
                     $query->orderBy('updated_at', 'DESC');
                 }], 'categories')
             ->findorfail($comic->id);
         $data = array(
+            'user' => $user,
+            'auth' => $auth,
             'comic' => $comic,
         );
 
@@ -141,6 +165,13 @@ class ComicsController extends Controller
      */
     public function update(Request $request, Comics $comic)
     {
+        $auth = Auth::guard('admin')->check();
+        $user = Auth::guard('admin')->user();
+        if(Gate::forUser($user)->denies('store', $auth))
+        {
+            return redirect('admin/login');
+        }
+
         $this->validate($request, [
             'name' => 'required|max:255',
             'slug' => 'required|max:255|alpha_dash',
@@ -191,6 +222,13 @@ class ComicsController extends Controller
     {
         //$comic = Comics::findOrFail($id);
 
+        $auth = Auth::guard('admin')->check();
+        $user = Auth::guard('admin')->user();
+        if(Gate::forUser($user)->denies('store', $auth))
+        {
+            return redirect('/admin/login');
+        }
+
         Storage::disk('public')->deleteDirectory($comic->slug);
 
         $comic->delete();
@@ -230,16 +268,19 @@ class ComicsController extends Controller
     public function updateCategory(Request $request, Comics $comic)
     {
         //$comic = Comics::findOrFail($id);
-        $categories = Categories::all();
-        
-        Foreach($categories as $category)
+        $auth = Auth::guard('admin')->check();
+        $user = Auth::guard('admin')->user();
+        if(Gate::forUser($user)->denies('store', $auth))
         {
-            if($request[$category->slug])
-            {
+            return redirect('admin/login');
+        }
+
+        $categories = Categories::all();
+
+        Foreach ($categories as $category) {
+            if ($request[$category->slug]) {
                 $comic->categories()->attach($category->id);
-            }
-            else
-            {
+            } else {
                 $comic->categories()->detach($category->id);
             }
         }

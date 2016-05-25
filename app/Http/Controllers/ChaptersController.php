@@ -7,9 +7,20 @@ use App\Http\Requests;
 use App\Chapters;
 use App\Comics;
 use Session;
+use Gate;
+use Auth;
 
 class ChaptersController extends Controller
 {
+
+    public function __construct()
+    {
+        // Middleware for all functions
+        $this->middleware('admin');
+
+        // Use middleware only on some functions
+        $this->middleware('admin', ['only' => 'create', 'edit']);
+    }
 
     /**
      * Display a listing of the resource.
@@ -18,7 +29,7 @@ class ChaptersController extends Controller
      */
     public function index(Comics $comic)
     {
-        return view('comics.index', $comic->slug); 
+        return view('comics.index', $comic->slug);
     }
 
     /**
@@ -43,19 +54,25 @@ class ChaptersController extends Controller
      */
     public function store(Request $request, Comics $comic)
     {
+        $auth = Auth::guard('admin')->check();
+        $user = Auth::guard('admin')->user();
+        if (Gate::forUser($user)->denies('store', $auth)) {
+            return redirect('admin/login');
+        }
+
         $this->validate($request, [
             'name' => 'required|max:255',
         ]);
-        
+
         $chapter = new Chapters;
         $chapter->fill($request->all());
         //$chapter->comic_id = $comic->id;
         $chapter->save();
-        
+
         $comic->chapters()->save($chapter);
-        
+
         Session::flash('flash_message', 'Success!');
-        
+
         return redirect()->route('comics.show', $comic->slug);
     }
 
@@ -67,11 +84,16 @@ class ChaptersController extends Controller
      */
     public function show(Comics $comic, Chapters $chapter)
     {
+        $auth = Auth::guard('admin')->check();
+        $user = Auth::guard('admin')->user();
+
         $data = array(
+            'user' => $user,
+            'auth' => $auth,
             'chapter' => $chapter,
             'comic' => $comic,
         );
-        
+
         return view('chapters.show')->with($data);
     }
 
@@ -87,7 +109,7 @@ class ChaptersController extends Controller
             'chapter' => $chapter,
             'comic' => $comic,
         );
-        
+
         return view('chapters.edit')->with($data);
     }
 
@@ -100,12 +122,18 @@ class ChaptersController extends Controller
      */
     public function update(Request $request, Comics $comic, Chapters $chapter)
     {
+        $auth = Auth::guard('admin')->check();
+        $user = Auth::guard('admin')->user();
+        if (Gate::forUser($user)->denies('store', $auth)) {
+            return redirect('admin/login');
+        }
+
         $chapter->fill($request->all());
-        
+
         $chapter->save();
-        
+
         Session::flash('flash_message', 'Success!');
-        
+
         return redirect()->route('comics.chapters.show', [$comic->slug, $chapter->name]);
     }
 
@@ -117,10 +145,16 @@ class ChaptersController extends Controller
      */
     public function destroy(Comics $comic, Chapters $chapter)
     {
+        $auth = Auth::guard('admin')->check();
+        $user = Auth::guard('admin')->user();
+        if (Gate::forUser($user)->denies('store', $auth)) {
+            return redirect('admin/login');
+        }
+
         $chapter->delete();
-        
+
         Session::flash('flash_message', 'Success!');
-        
+
         return redirect()->route('comics.show', $comic->slug);
     }
 }
