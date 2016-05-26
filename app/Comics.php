@@ -23,6 +23,14 @@ class Comics extends Model
                 'App\Categories', 'pivot_comic_category', 'comic_id', 'category_id'
         );
     }
+    
+    //Dinh nghia quan he like
+    public function like()
+    {
+        return $this->belongsToMany(
+                'App\User', 'likes', 'comic_id', 'user_id'
+        );
+    }
 
     //Dinh nghia quan he voi chapter
     public function chapters()

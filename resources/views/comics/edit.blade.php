@@ -2,7 +2,7 @@
 
 @section('content')
 <p>
-    <a href="{{ route('comics.show', $comic->id) }}" class="btn-lg btn-info">Quay lai</a>
+    <a href="{{ route('comics.show', $comic->slug) }}" class="btn-lg btn-info">Quay lai</a>
 </p>
 
 <h3>{{ $comic->name }}</h3>

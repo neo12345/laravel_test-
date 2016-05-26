@@ -37,6 +37,10 @@ Route::bind('categories', function($value, $route) {
 
 Route::resource('categories', 'CategoriesController');
 
+Route::post('comics/{slug}/like',[
+    'as' => 'comics.like',
+    'uses' => 'ComicsController@like',
+]);
 Route::resource('comics', 'ComicsController');
 
 Route::resource('comics.chapters', 'ChaptersController');
@@ -48,12 +52,6 @@ Route::post('comics/{slug}/chapters/{name}/pages/{id}/updateAjax',[
     'uses' => 'PagesController@updateAjax',
 ]);
 Route::resource('comics.chapters.pages', 'PagesController', ['expect' => 'update']);
-//Route::get('comics/{comic_slug}/chapters/{chapter_name}/pages', 'PagesController@index');
-//Route::post('comics/{comic_slug}/chapters/{chapter_name}/pages/{id}', 'PagesController@update');
-//Route::get('comics/{comic_slug}/chapters/{chapter_name}/pages/create', 'PagesController@create');
-//Route::post('comics/{comic_slug}/chapters/{chapter_name}/pages', 'PagesController@store');
-//Route::delete('comics/{comic_slug}/chapters/{chapter_name}/pages/{id}', 'PagesController@destroy');
-//Route::get('comics/{comic_slug}/chapters/{chapter_name}/pages/{id}/edit', 'PagesController@edit');
 
 Route::get('admin/login','Adminauth\AuthController@showLoginForm');
 Route::post('admin/login','Adminauth\AuthController@login');

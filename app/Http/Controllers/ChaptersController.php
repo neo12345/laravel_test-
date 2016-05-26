@@ -86,12 +86,21 @@ class ChaptersController extends Controller
     {
         $auth = Auth::guard('admin')->check();
         $user = Auth::guard('admin')->user();
+        
+        $next = Chapters::where('id', '>', $chapter->id)
+            ->where('comic_id', '=', $comic->id)
+            ->first();
+        $prev = Chapters::where('id', '<', $chapter->id)
+            ->where('comic_id', '=', $comic->id)
+            ->first();
 
         $data = array(
             'user' => $user,
             'auth' => $auth,
             'chapter' => $chapter,
             'comic' => $comic,
+            'next' => $next,
+            'prev' => $prev,
         );
 
         return view('chapters.show')->with($data);

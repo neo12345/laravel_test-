@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 //use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Request;
 //use App\Http\Requests;
 use App\Comics;
@@ -135,7 +136,7 @@ class ComicsController extends Controller
                     $query->orderBy('updated_at', 'DESC');
                 }], ['comments' => function($query) {
                     $query->orderBy('created_at', 'ACS');
-                }], 'categories')
+                }], 'categories', 'like')
             ->findorfail($comic->id);
         $data = array(
             'user' => $user,
@@ -292,5 +293,27 @@ class ComicsController extends Controller
         Session::flash('flash_message', 'Success!');
 
         return redirect()->route('comics.show', $comic->slug);
+    }
+
+    public function like(Request $request)
+    {        
+        $comic = Comics::findorfail($request->comic_id);
+        if($comic->like->contains($request->user_id)) {
+            $comic->like()->detach($request->user_id);
+            
+            $data = array(
+                'action' => 'unlike',
+                'count' => count($comic->like)-1,
+            );
+            return Response::json($data);
+        }
+        else {
+            $comic->like()->attach($request->user_id);
+            $data = array(
+                'action' => 'like',
+                'count' => count($comic->like)+1,
+            );
+            return Response::json($data);
+        }
     }
 }

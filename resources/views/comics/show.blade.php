@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<input type="hidden" value="{{ $comic->slug }}" id="comic_slug">
 <div class="container">
     <div class="row">
         <div class="thumbnail col-md-3">
@@ -24,18 +25,26 @@
         <div class="col-md-6">
             <h3>{{ $comic->name }}</h3>
             <p>{{ $comic->description }}</p>
-            <p>
-                Categories: 
+            <p>Categories: 
             <hr>
             @foreach($comic->categories as $category)
             <a href='{{ route('categories.show', $category->slug) }}'>{{ $category->name }}</a>, 
             @endforeach
 
             @if(Gate::forUser($user)->allows('store', $auth))
-            <hr>
-            <a href="{{ route('comics.editCategory', $comic->slug) }}" class="btn btn-warning">Sua category</a>
+                <hr>
+                <a href="{{ route('comics.editCategory', $comic->slug) }}" class="btn btn-warning">Sua category</a>
             @endif
             </p>
+            
+            <div id="like_counter">Like counter: {{ count($comic->like) }}</div>
+            @can('store', $auth)
+                @if( $comic->like->contains($user->id))
+                    <button id="btn_like" class="btn btn-lg btn-primary">Unlike</button>
+                @else
+                    <button id="btn_like" class="btn btn-lg btn-primary">Like</button>
+                @endif
+            @endcan
         </div>
     </div>
     <div class="row">
@@ -146,4 +155,5 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script src="{{asset('asset/js/comments.js')}}"></script>
+<script src="{{asset('asset/js/like.js')}}"></script>
 @endsection

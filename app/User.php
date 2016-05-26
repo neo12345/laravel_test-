@@ -23,4 +23,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    
+    //Dinh nghia quan he like
+    public function likes()
+    {
+        return $this->belongsToMany(
+                'App\Comics', 'likes', 'user_id', 'comic_id'
+        );
+    }
 }

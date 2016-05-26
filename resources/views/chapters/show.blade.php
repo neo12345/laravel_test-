@@ -25,5 +25,14 @@
     @foreach($chapter->pages as $page)
     <img class="img-responsive" src="{{ url('../storage/app/public').'/'.$page->link }}"/>
     @endforeach
+    
+    <div id="navigation" style="align-content: center">
+        @if($prev)
+        <a href="{{ route('comics.chapters.show', [$comic->slug, $prev->name]) }}" class="btn btn-lg btn-primary">Prev</a>
+        @endif
+        @if($next)
+        <a href="{{ route('comics.chapters.show', [$comic->slug, $next->name]) }}" class="btn btn-lg btn-primary">Next</a>
+        @endif
+    </div>
 </div>    
 @endsection
