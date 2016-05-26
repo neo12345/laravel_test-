@@ -23,7 +23,7 @@
     @endif
     
     @foreach($chapter->pages as $page)
-    <img src="{{ url('../storage/app/public').'/'.$page->link }}"/>
+    <img class="img-responsive" src="{{ url('../storage/app/public').'/'.$page->link }}"/>
     @endforeach
 </div>    
 @endsection

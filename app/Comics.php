@@ -33,7 +33,7 @@ class Comics extends Model
     //Dinh nghia quan he voi comment
     public function comments()
     {
-        return $this->hasMany('App\Comments', 'pivot_comic_comments', 'comic_id', 'comment_id');
+        return $this->hasMany('App\Comments', 'comic_id');
     }
 
     //Xoa tat car cac thu co lien quan truoc khi xoa
@@ -44,16 +44,9 @@ class Comics extends Model
         static::deleted(function($comic) {
             foreach ($comic->chapters as $chapter) {
                 $chapter->pages()->delete();
-                foreach ($chapter->comments as $comment) {
-                    $comment->replies()->delete();
-                }
-                $chapter->comments()->delete();
             }
             $comic->chapters()->delete();
             $comic->categories()->detach();
-            foreach ($comic->comments as $comment) {
-                $comment->replies()->delete();
-            }
             $comic->comments()->delete();
         });
     }

@@ -66,8 +66,7 @@ class ComicsController extends Controller
     {
         $auth = Auth::guard('admin')->check();
         $user = Auth::guard('admin')->user();
-        if(Gate::forUser($user)->denies('store', $auth))
-        {
+        if (Gate::forUser($user)->denies('store', $auth)) {
             return redirect('admin/login');
         }
 
@@ -124,16 +123,24 @@ class ComicsController extends Controller
     public function show(Comics $comic)
     {
         //$comic = Comics::with('chapters', 'categories')->findorfail($id);//;
-        $auth = Auth::guard('admin')->check();
-        $user = Auth::guard('admin')->user();
+        if (Auth::check()) {
+            $user = Auth::user();
+            $auth = Auth::guard('admin')->check();
+        }
+        if (Auth::guard('admin')->check()) {
+            $user = Auth::guard('admin')->user();
+            $auth = Auth::guard('admin')->check();
+        }
         $comics = Comics::with(['chapters' => function($query) {
                     $query->orderBy('updated_at', 'DESC');
+                }], ['comments' => function($query) {
+                    $query->orderBy('created_at', 'ACS');
                 }], 'categories')
             ->findorfail($comic->id);
         $data = array(
             'user' => $user,
             'auth' => $auth,
-            'comic' => $comic,
+            'comic' => $comics,
         );
 
         return view('comics.show')->with($data);
@@ -167,8 +174,7 @@ class ComicsController extends Controller
     {
         $auth = Auth::guard('admin')->check();
         $user = Auth::guard('admin')->user();
-        if(Gate::forUser($user)->denies('store', $auth))
-        {
+        if (Gate::forUser($user)->denies('store', $auth)) {
             return redirect('admin/login');
         }
 
@@ -224,8 +230,7 @@ class ComicsController extends Controller
 
         $auth = Auth::guard('admin')->check();
         $user = Auth::guard('admin')->user();
-        if(Gate::forUser($user)->denies('store', $auth))
-        {
+        if (Gate::forUser($user)->denies('store', $auth)) {
             return redirect('/admin/login');
         }
 
@@ -270,8 +275,7 @@ class ComicsController extends Controller
         //$comic = Comics::findOrFail($id);
         $auth = Auth::guard('admin')->check();
         $user = Auth::guard('admin')->user();
-        if(Gate::forUser($user)->denies('store', $auth))
-        {
+        if (Gate::forUser($user)->denies('store', $auth)) {
             return redirect('admin/login');
         }
 

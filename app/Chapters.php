@@ -29,11 +29,11 @@ class Chapters extends Model
         return $this->hasMany('App\Pages', 'chapter_id');
     }
     
-    //Dinh nghia quan he voi comment
-    public function comments()
-    {
-        return $this->hasMany('App\Comments', 'pivot_chapter_comments', 'chapter_id', 'comment_id');
-    }
+//    //Dinh nghia quan he voi comment
+//    public function comments()
+//    {
+//        return $this->hasMany('App\Comments', 'pivot_chapter_comments', 'chapter_id', 'comment_id');
+//    }
     
     
     //Xoa tat car cac thu cos lien quan truoc khi xoa
@@ -43,10 +43,6 @@ class Chapters extends Model
 
         static::deleted(function($comic) {
             $comic->pages()->delete();
-            foreach ($chapter->comments as $comment) {
-                $comment->replies()->delete();
-            }
-            $chapter->comments()->delete();
         });
     }
 }

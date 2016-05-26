@@ -25,7 +25,7 @@ class AlterCategoriesTable extends Migration
     public function down()
     {
         Schema::table('categories', function ($table) {
-            $table->dropComlumn('slug');
+            $table->dropColumn('slug');
         });
     }
 }

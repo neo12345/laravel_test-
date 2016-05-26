@@ -20,20 +20,20 @@ class Comments extends Model
         );
     }
 
-    //Dinh nghia quan he voi chapter
-    public function chapters()
-    {
-        return $this->belongsTo('App\Chapters', 'pivot_chapter_comments', 'comment_id', 'chapter_id');
-    }
+//    //Dinh nghia quan he voi chapter
+//    public function chapters()
+//    {
+//        return $this->belongsTo('App\Chapters', 'pivot_chapter_comments', 'comment_id', 'chapter_id');
+//    }
     
     //Dinh nghia quan he voi comment
     public function comments()
     {
-        return $this->belongsTo('App\Comments', 'pivot_comment_comments', 'reply_id', 'comment_id');
+        return $this->belongsTo('App\Comments', 'reply_to');
     }
     
     public function replies()
     {
-        return $this->hasMany('App\Comments', 'pivot_comment_comments', 'comment_id', 'reply_id');
+        return $this->hasMany('App\Comments', 'reply_to');
     }
 }

@@ -17,6 +17,8 @@ class CreateCommentsTable extends Migration
             $table->integer('user_id');
             $table->string('username');
             $table->text('comment');
+            $table->integer('comic_id');
+            $table->integer('reply_to')->nullable();
             $table->timestamps();
         });
     }

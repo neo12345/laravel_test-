@@ -41,6 +41,8 @@ Route::resource('comics', 'ComicsController');
 
 Route::resource('comics.chapters', 'ChaptersController');
 
+Route::resource('comments', 'CommentsController');
+
 Route::post('comics/{slug}/chapters/{name}/pages/{id}/updateAjax',[
     'as' => 'comics.chapters.pages.updateAjax',
     'uses' => 'PagesController@updateAjax',

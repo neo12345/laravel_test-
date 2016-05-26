@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Comments;
+use Gate;
+use Auth;
 use App\Http\Requests;
+use Illuminate\Support\Facades\Response;
 
 class CommentsController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -36,7 +40,29 @@ class CommentsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'comment' => 'required',
+            'comic_id' => 'required|numeric',
+        ]);
+
+        $comment = new Comments;
+
+
+        $comment->comment = $request->comment;
+        $comment->comic_id = $request->comic_id;
+        $comment->reply_to = $request->reply_to;
+
+        if (!Auth::check() && !Auth::guard('admin')->check()) {
+            $comment->user_id = 0;
+            $comment->username = 'Anonymous';
+        } else {
+            $comment->user_id = $request->user_id;
+            $comment->username = $request->username;
+        }
+
+        $comment->save();
+
+        return Response::json($comment);
     }
 
     /**
