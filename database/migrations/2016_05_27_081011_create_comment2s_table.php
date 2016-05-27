@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePivotComicCommentsTable extends Migration
+class CreateComment2sTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,8 @@ class CreatePivotComicCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('pivot_comic_comments', function (Blueprint $table) {
+        Schema::create('comment2s', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('comic_id');
-            $table->integer('comment_id');
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ class CreatePivotComicCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('pivot_comic_comments');
+        Schema::drop('comment2s');
     }
 }
