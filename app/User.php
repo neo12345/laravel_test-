@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
+
     /**
      * The attributes that are mass assignable.
      *
@@ -23,12 +24,19 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-    
+
     //Dinh nghia quan he like
     public function likes()
     {
         return $this->belongsToMany(
                 'App\Comics', 'likes', 'user_id', 'comic_id'
+        );
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(
+                'App\Comments', 'user_id'
         );
     }
 }

@@ -16,7 +16,7 @@ class Comments extends Model
     public function comics()
     {
         return $this->belongsTo(
-                'App\Comics', 'pivot_comic_comments', 'comment_id', 'comic_id'
+                'App\Comics', 'comic_id'
         );
     }
 
