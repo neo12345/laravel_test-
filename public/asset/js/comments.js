@@ -1,6 +1,7 @@
 $(document).ready(function () {
     //click btn reply then set value of frmComent > reply_to
-    $(".reply").click(function () {
+    //$(".reply").click(function () {
+    $('#comment_list').on('click', '.reply',function(){
         var id = $(this).val();
         $('#reply_to').val(id);
         $('#comment').focus();

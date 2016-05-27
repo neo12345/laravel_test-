@@ -61,7 +61,7 @@ class ChaptersController extends Controller
         }
 
         $this->validate($request, [
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|unique:chapters,name',
         ]);
 
         $chapter = new Chapters;

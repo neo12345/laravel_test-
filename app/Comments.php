@@ -46,4 +46,17 @@ class Comments extends Model
     {
         return $this->hasMany('App\Comments', 'reply_to');
     }
+    
+    //Xoa tat car cac thu co lien quan truoc khi xoa
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleted(function($comment) {
+            foreach ($comment->replies as $reply) {
+                $reply->replies()->delete();
+            }
+            $comment->replies()->delete();
+        });
+    }
 }

@@ -141,6 +141,14 @@
             {{ $comment->comment }}
             </div>
             <br>
+            @if(Gate::forUser($user)->allows('store', $auth))
+                {{ Form::open([
+                    'method' => 'DELETE',
+                    'route' => ['comments.destroy', $comment->id]
+                ]) }}
+                    {{ Form::submit('Delete', ['class' => 'btn btn-danger'])}}
+                {{ Form::close() }}
+            @endif
             <button id="reply{{ $comment->id }}" class="btn btn-primary btn-lg pull-right reply" value="{{ $comment->id }}">Reply</button>
             <br>
             <br>
