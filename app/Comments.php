@@ -10,6 +10,8 @@ class Comments extends Model
         'user_id',
         'username',
         'comment',
+        'comic_id',
+        'reply_to',
     ];
     
     //Dinh nghia quan he voi comic
@@ -17,6 +19,14 @@ class Comments extends Model
     {
         return $this->belongsTo(
                 'App\Comics', 'comic_id'
+        );
+    }
+    
+    //Dinh nghia quan he voi user
+    public function users()
+    {
+        return $this->belongsTo(
+                'App\User', 'user_id'
         );
     }
 

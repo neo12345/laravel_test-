@@ -84,8 +84,16 @@ class ChaptersController extends Controller
      */
     public function show(Comics $comic, Chapters $chapter)
     {
-        $auth = Auth::guard('admin')->check();
-        $user = Auth::guard('admin')->user();
+        $user = null;
+        $auth = false;
+        if (Auth::check()) {
+            $user = Auth::user();
+            $auth = Auth::guard('admin')->check();
+        }
+        if (Auth::guard('admin')->check()) {
+            $user = Auth::guard('admin')->user();
+            $auth = Auth::guard('admin')->check();
+        }
         
         $next = Chapters::where('id', '>', $chapter->id)
             ->where('comic_id', '=', $comic->id)

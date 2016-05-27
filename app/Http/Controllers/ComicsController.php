@@ -124,6 +124,8 @@ class ComicsController extends Controller
     public function show(Comics $comic)
     {
         //$comic = Comics::with('chapters', 'categories')->findorfail($id);//;
+        $user = null;
+        $auth = false;
         if (Auth::check()) {
             $user = Auth::user();
             $auth = Auth::guard('admin')->check();

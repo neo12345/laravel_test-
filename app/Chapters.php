@@ -29,11 +29,11 @@ class Chapters extends Model
         return $this->hasMany('App\Pages', 'chapter_id');
     }
     
-//    //Dinh nghia quan he voi comment
-//    public function comments()
-//    {
-//        return $this->hasMany('App\Comments', 'pivot_chapter_comments', 'chapter_id', 'comment_id');
-//    }
+    //Dinh nghia quan he voi comment2
+    public function comment2s()
+    {
+        return $this->hasMany('App\Comment2s', 'chapter_id');
+    }
     
     
     //Xoa tat car cac thu cos lien quan truoc khi xoa
