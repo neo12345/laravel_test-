@@ -46,6 +46,11 @@ Route::resource('comics', 'ComicsController');
 Route::resource('comics.chapters', 'ChaptersController');
 
 Route::resource('comments', 'CommentsController');
+
+Route::post('comment2s/getall/{chapter_id}', [
+    'as' => 'comment2s.getall',
+    'uses' => 'Comment2sController@getAll'
+]);
 Route::resource('comment2s', 'Comment2sController');
 
 Route::post('comics/{slug}/chapters/{name}/pages/{id}/updateAjax',[

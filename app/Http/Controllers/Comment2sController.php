@@ -110,4 +110,17 @@ class Comment2sController extends Controller
         
         return redirect()->back();
     }
+    
+    public function getAll(Request $request)
+    {   
+        $chapter_id = $request->chapter_id;
+        $comment =  Comment2s::where('chapter_id', '=', $chapter_id)->orderBy('created_at')->get();
+        
+        $data = [
+            'comment2s' => $comment,
+        ];
+        
+        return view('comment2s/_comments')->with($data);
+        //return Response::json($comment);
+    }
 }
