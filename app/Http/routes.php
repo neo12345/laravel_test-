@@ -13,6 +13,10 @@
 
 Route::get('/', 'ComicsController@index'); 
 
+Route::get('/auth/confirm/{token}', [
+    'as' => 'auth.confirm',
+    'uses' => 'Auth\AuthController@confirm',
+]);
 Route::auth();
 
 Route::get('/home', 'ComicsController@index');

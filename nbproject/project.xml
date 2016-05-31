@@ -11,6 +11,7 @@
             <word>endif</word>
             <word>endsection</word>
             <word>foreach</word>
+            <word>khoan</word>
         </spellchecker-wordlist>
     </configuration>
 </project>
